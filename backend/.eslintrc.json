@@ -1,0 +1,11 @@
+{
+  "extends": ["prettier", "prettier/standard", "@hh.ru/eslint-config"],
+  "plugins": ["json", "markdown", "prettier"],
+  "rules": {
+    "prettier/prettier": "warn",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "no-restricted-imports": "off",
+    "no-console": "off"
+  }
+}

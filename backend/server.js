@@ -3,7 +3,7 @@ const router = require('@koa/router')();
 const koaBody = require('koa-body');
 const Koa = require('koa');
 
-const app = module.exports = new Koa();
+const app = (module.exports = new Koa());
 
 const cities = ['Москва', 'Орел', 'Чита'];
 const transport = ['Машина', 'Автобус', 'Поезд', 'Самолёт'];
@@ -11,8 +11,7 @@ const transport = ['Машина', 'Автобус', 'Поезд', 'Самолё
 app.use(koaBody());
 app.use(cors());
 
-router.get('/cities', getCities)
-    .get('/transport', getTransport);
+router.get('/cities', getCities).get('/transport', getTransport);
 app.use(router.routes());
 
 async function getCities(ctx) {
