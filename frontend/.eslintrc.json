@@ -1,0 +1,16 @@
+{
+  "extends": ["plugin:react/recommended", "prettier", "prettier/standard", "@hh.ru/eslint-config"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": ["react", "json", "markdown", "react-redux", "prettier"],
+  "rules": {
+    "prettier/prettier": "warn",
+    "react-redux/prefer-separate-component-file": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "no-restricted-imports": "off"
+  }
+}
