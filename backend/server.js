@@ -1,26 +1,19 @@
-const cors = require('@koa/cors');
-const router = require('@koa/router')();
-const koaBody = require('koa-body');
-const Koa = require('koa');
+import cors from '@koa/cors';
+import Router from '@koa/router';
+import koaBody from 'koa-body';
+import Koa from 'koa';
+
+import getCities from './handlers/getCities';
+import getTransport from './handlers/getTransport';
 
 const app = (module.exports = new Koa());
-
-const cities = ['Москва', 'Орел', 'Чита'];
-const transport = ['Машина', 'Автобус', 'Поезд', 'Самолёт'];
+const router = Router();
 
 app.use(koaBody());
 app.use(cors());
 
 router.get('/cities', getCities).get('/transport', getTransport);
 app.use(router.routes());
-
-async function getCities(ctx) {
-    ctx.body = cities;
-}
-
-async function getTransport(ctx) {
-    ctx.body = transport;
-}
 
 app.listen(3010, () => {
     console.log('Server started on http://localhost:3010/');
