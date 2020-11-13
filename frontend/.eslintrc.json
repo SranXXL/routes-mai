@@ -11,6 +11,7 @@
     "react-redux/prefer-separate-component-file": "off",
     "import/no-unresolved": "off",
     "import/extensions": "off",
-    "no-restricted-imports": "off"
+    "no-restricted-imports": "off",
+    "no-console": "off"
   }
 }
