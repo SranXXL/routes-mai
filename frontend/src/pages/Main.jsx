@@ -6,29 +6,25 @@ import Button from 'react-bootstrap/Button';
 import Header from '../components/Header.jsx';
 import { setTestField } from '../reducers/testReducer.js';
 import testFunc from '../reducers/testFunc.js';
+import fetchWrapper from '../utils/fetchWrapper';
 
-const getData = async (path) => {
-    const response = await fetch(path);
+const initialFetch = async () => {
+    try {
+        const { data: cities } = await fetchWrapper('http://localhost:3010/cities');
+        console.log(cities);
 
-    if (response.ok) {
-        const data = await response.json();
-        // eslint-disable-next-line no-console
-        console.log(data);
-        return data;
+        const { data: transport } = await fetchWrapper('http://localhost:3010/transport');
+        console.log(transport);
+    } catch {
+        //
     }
-    throw Error;
 };
 
 const Main = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        try {
-            getData('http://localhost:3010/cities');
-            getData('http://localhost:3010/transport');
-        } catch {
-            //
-        }
+        initialFetch();
     }, []);
 
     return (
