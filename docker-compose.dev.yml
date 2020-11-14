@@ -1,0 +1,13 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 304
+      POSTGRES_USER: mai
+      POSTGRES_DB: routes-mai
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 40432:5432
