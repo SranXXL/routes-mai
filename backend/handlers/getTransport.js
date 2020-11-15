@@ -1,4 +1,4 @@
-const transport = ['Машина', 'Автобус', 'Поезд', 'Самолёт'];
+const transport = ['Car', 'Bus', 'Train', 'Airplane'];
 
 const getTransport = async (ctx) => {
     ctx.body = transport;
