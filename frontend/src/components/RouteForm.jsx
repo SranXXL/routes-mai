@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Container from 'react-bootstrap/Container';
@@ -16,7 +16,35 @@ import Airplane from '../assets/airplane.svg';
 import Ruble from '../assets/ruble.svg';
 import Clock from '../assets/clock.svg';
 
+import fetchWrapper from '../utils/fetchWrapper';
+
+const mapTransportToIcon = {
+    Car,
+    Bus,
+    Train,
+    Airplane,
+};
+
+const initialFetch = async (setCities, setTransports) => {
+    try {
+        const { data: cities } = await fetchWrapper('http://localhost:3010/cities');
+        setCities(cities);
+
+        const { data: transports } = await fetchWrapper('http://localhost:3010/transport');
+        setTransports(transports);
+    } catch {
+        console.error('Unable to get data!');
+    }
+};
+
 const RouteForm = () => {
+    const [cities, setCities] = useState([]);
+    const [transports, setTransports] = useState([]);
+
+    useEffect(() => {
+        initialFetch(setCities, setTransports);
+    }, []);
+
     return (
         <Container className="route-form-container">
             <Row className="route-form-row">
@@ -29,10 +57,9 @@ const RouteForm = () => {
                     <Form.Group controlId="routeForm.DepatureSelect">
                         <Form.Label>Пункт отправления</Form.Label>
                         <Form.Control as="select">
-                            <option>Москва</option>
-                            <option>Санкт-Петербург</option>
-                            <option>Орёл</option>
-                            <option>Чита</option>
+                            {cities.map((city) => (
+                                <option key={city}>{city}</option>
+                            ))}
                         </Form.Control>
                     </Form.Group>
                 </Col>
@@ -40,10 +67,9 @@ const RouteForm = () => {
                     <Form.Group controlId="routeForm.ArrivalSelect">
                         <Form.Label>Пункт назначения</Form.Label>
                         <Form.Control as="select">
-                            <option>Москва</option>
-                            <option>Санкт-Петербург</option>
-                            <option>Орёл</option>
-                            <option>Чита</option>
+                            {cities.map((city) => (
+                                <option key={city}>{city}</option>
+                            ))}
                         </Form.Control>
                     </Form.Group>
                 </Col>
@@ -53,18 +79,11 @@ const RouteForm = () => {
                 <Col className="route-form-btn-group">
                     <Form.Label>Вид транспорта</Form.Label>
                     <ButtonGroup aria-label="Basic example">
-                        <Button variant="light">
-                            <Image src={Car} />
-                        </Button>
-                        <Button variant="light">
-                            <Image src={Bus} />
-                        </Button>
-                        <Button variant="light">
-                            <Image src={Train} />
-                        </Button>
-                        <Button variant="light">
-                            <Image src={Airplane} />
-                        </Button>
+                        {transports.map((transport) => (
+                            <Button variant="light" key={transport}>
+                                <Image src={mapTransportToIcon[transport]} />
+                            </Button>
+                        ))}
                     </ButtonGroup>
                 </Col>
                 <Col className="route-form-btn-group">
