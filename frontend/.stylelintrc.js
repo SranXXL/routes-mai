@@ -3,5 +3,6 @@ module.exports = {
     plugins: ['stylelint-prettier'],
     rules: {
         'prettier/prettier': true,
+        'declaration-property-value-whitelist': {},
     },
 };

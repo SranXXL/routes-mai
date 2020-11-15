@@ -1,17 +1,22 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const Header = ({ name }) => {
-    const { testField, testThunkField } = useSelector(({ testReducer }) => ({
-        testField: testReducer.testField,
-        testThunkField: testReducer.testThunkField,
-    }));
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Image from 'react-bootstrap/Image';
 
+import Globe from '../assets/globe.svg';
+
+const Header = () => {
     return (
-        <div className="test-class">
-            Шапочка приложения {name}. {testField} {testThunkField}
-        </div>
+        <header className="header-container">
+            <Container>
+                <Row className="header-row">
+                    <Image className="header-logo" src={Globe} />
+                    <h1 className="header-title">MAN MAPS</h1>
+                </Row>
+            </Container>
+        </header>
     );
 };
 
