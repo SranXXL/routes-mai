@@ -1,7 +1,6 @@
-const transport = ['Car', 'Bus', 'Train', 'Airplane'];
-
-const getTransport = async (ctx) => {
-    ctx.body = transport;
+const getTransport = (client) => async (ctx) => {
+    const transport = await client.query('SELECT name FROM Transport');
+    ctx.body = transport.rows.map(({ name }) => name);
 };
 
 export default getTransport;
