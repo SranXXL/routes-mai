@@ -6,6 +6,7 @@ import { Client } from 'pg';
 
 import getCities from './handlers/getCities';
 import getTransport from './handlers/getTransport';
+import findRoutes from './handlers/findRoutes';
 
 const app = (module.exports = new Koa());
 const router = Router();
@@ -21,7 +22,7 @@ client.connect();
 app.use(koaBody());
 app.use(cors());
 
-router.get('/cities', getCities(client)).get('/transport', getTransport(client));
+router.get('/cities', getCities(client)).get('/transport', getTransport(client)).post('/routes', findRoutes(client));
 app.use(router.routes());
 
 app.listen(3010, () => {
