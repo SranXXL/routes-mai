@@ -33,7 +33,7 @@ CREATE TABLE Journeys
 	id_city2 BIGINT REFERENCES Cities (id),
 	id_transport BIGINT REFERENCES Transport (id),
 	id_carrier BIGINT REFERENCES Carrier (id),
-	time_journey TIME,
+	time DOUBLE PRECISION,
 	cost DOUBLE PRECISION,
-	dispatch TIME
+	departure_time TIME
 );

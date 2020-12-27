@@ -1,5 +1,5 @@
-const fetchWrapper = async (path) => {
-    const response = await fetch(path);
+const fetchWrapper = async (path, params) => {
+    const response = await fetch(path, params);
 
     if (response.ok) {
         const data = await response.json();
