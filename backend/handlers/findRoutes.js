@@ -1,19 +1,18 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
-import createGraph from 'ngraph.graph';
-import aStarPathSearch from '../utils/a-star/index.js';
+/* eslint-disable no-unused-vars */
+
+import graphLib, { Graph } from '@dagrejs/graphlib';
 
 const VALID_SORT_TYPES = ['cost', 'time'];
 
 const findRoutes = (client) => async (ctx) => {
-    const { depature, destination, transports, sort, alternativeRoutesCount } = JSON.parse(ctx.request.body);
+    const { depature, destination, transports, sort } = JSON.parse(ctx.request.body);
     const enabledTransports = Object.entries(transports || {})
         .filter(([key, value]) => value)
         .map(([key, value]) => key);
     const isTransportFieldValid = enabledTransports.length > 0;
     const isSortFieldValid = VALID_SORT_TYPES.includes(sort);
-    const isFormValid =
-        !!depature && !!destination && isTransportFieldValid && isSortFieldValid && alternativeRoutesCount >= 0;
+    const isFormValid = !!depature && !!destination && isTransportFieldValid && isSortFieldValid;
     if (!isFormValid) {
         ctx.throw(400);
     }
@@ -22,18 +21,32 @@ const findRoutes = (client) => async (ctx) => {
     const journeys = await client.query(
         `SELECT id_city1, id_city2, id_transport, cost, time FROM Journeys WHERE id_transport IN (${transport_ids})`
     );
-    const graph = createGraph();
-    journeys.rows.forEach(({ id_city1, id_city2, id_transport, cost, time }) =>
-        graph.addLink(id_city1, id_city2, { cost, time, id_transport })
+    const graph = new Graph({ multigraph: true });
+    journeys.rows.forEach(({ id_city1, id_city2, id_transport, cost, time }, index) =>
+        graph.setEdge(id_city1, id_city2, { cost, time, id_transport }, `${id_city1}_${index}`)
     );
 
-    const pathFinder = aStarPathSearch(graph, {
-        distance(fromNode, toNode, link) {
-            return link.data[sort];
-        },
-    });
-    const result = pathFinder(depature, destination);
-    ctx.body = { result };
+    const dijkstraResult = graphLib.alg.dijkstra(graph, depature, (e) => graph.edge(e)[sort]);
+
+    let city = destination;
+    let totalCost = 0;
+    let totalTime = 0;
+    const path = [];
+    while (city !== depature) {
+        const { distance, predecessor } = dijkstraResult[city];
+        const weight = distance - dijkstraResult[predecessor].distance;
+        // eslint-disable-next-line no-await-in-loop
+        const journeys = await client.query(
+            `SELECT id_transport, cost, time FROM Journeys WHERE id_transport IN (${transport_ids}) AND ${sort} = ${weight} LIMIT 1`
+        );
+        const journey = journeys.rows[0];
+        path.unshift(journey);
+        totalCost += journey.cost;
+        totalTime += journey.time;
+        city = predecessor;
+    }
+
+    ctx.body = { path, totalCost, totalTime };
 };
 
 export default findRoutes;
