@@ -46,7 +46,7 @@ const findRoutes = (client) => async (ctx) => {
         const weight = distance - dijkstraResult[predecessor].distance;
         // eslint-disable-next-line no-await-in-loop
         const journeys = await client.query(
-            `SELECT id_transport, cost, time FROM Journeys WHERE id_transport IN (${transport_ids}) AND ${sort} = ${weight} LIMIT 1`
+            `SELECT id_city1, id_city2, id_transport, cost, time FROM Journeys WHERE id_transport IN (${transport_ids}) AND ${sort} = ${weight} AND id_city1 = ${predecessor} AND id_city2 = ${city} LIMIT 1`
         );
         const journey = journeys.rows[0];
         path.unshift(journey);
