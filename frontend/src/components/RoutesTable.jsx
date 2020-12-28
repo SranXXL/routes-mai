@@ -6,6 +6,7 @@ import Image from 'react-bootstrap/Image';
 import Table from 'react-bootstrap/Table';
 
 import { mapTransportToIcon } from '../constants';
+import formattedTime from '../utils/formattedTime';
 
 const RoutesTable = () => {
     const { error, intial, path, totalCost, totalTime } = useSelector(({ routeReducer }) => routeReducer);
@@ -13,7 +14,6 @@ const RoutesTable = () => {
         cities: cityReducer.cities,
         transports: transportReducer.transports,
     }));
-    console.log(totalCost, totalTime);
 
     if (intial) {
         return <></>;
@@ -37,8 +37,8 @@ const RoutesTable = () => {
                         <th>Вид транспорта</th>
                         <th>Пункт отправления</th>
                         <th>Пункт назначения</th>
-                        <th>Время в пути, ч</th>
-                        <th>Стоимость, руб.</th>
+                        <th>Время в пути</th>
+                        <th>Стоимость</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,15 +56,15 @@ const RoutesTable = () => {
                                 </td>
                                 <td>{departure}</td>
                                 <td>{destination}</td>
-                                <td>{time}</td>
-                                <td>{cost}</td>
+                                <td>{formattedTime(time)}</td>
+                                <td>{cost} руб.</td>
                             </tr>
                         );
                     })}
                 </tbody>
             </Table>
             <p>Общая стоимость поездки: {totalCost} руб.</p>
-            <p>Общее время в пути: {totalTime} ч</p>
+            <p>Общее время в пути: {formattedTime(totalTime)}</p>
         </>
     );
 };
