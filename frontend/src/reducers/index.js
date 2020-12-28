@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
-import { testReducer } from './testReducer.js';
+import routeReducer from './routeReducer.js';
+import cityReducer from './cityReducer.js';
+import transportReducer from './transportReducer.js';
 
 const rootReducer = combineReducers({
-    testReducer,
+    routeReducer,
+    cityReducer,
+    transportReducer,
 });
 
 export default rootReducer;

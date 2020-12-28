@@ -1,7 +1,8 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import './header.css';
 @import './routeForm.css';
+@import './routeTable.css';
 
-.test-class {
-    background-color: #f00;
+.gap-bottom {
+    margin-bottom: 24px;
 }
